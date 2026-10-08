@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/auth/authSlice';
 import { setSelectedMonth } from '../features/transactions/transactionSlice';
 import ThemeToggle from './ThemeToggle';
+import CurrencySelector from './CurrencySelector';
 
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -63,7 +64,10 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-3 sm:gap-5">
+          {/* CURRENCY SELECTOR (USD / INR) */}
+          <CurrencySelector />
+
           {/* MONTH SELECTOR */}
           <div className="hidden sm:block">
             <select
@@ -95,7 +99,7 @@ export default function Navbar() {
                 console.error(e);
               }
             }}
-            className="text-sm font-medium text-success-400 hover:text-success-300 transition-colors"
+            className="text-sm font-medium text-success-400 hover:text-success-300 transition-colors hidden sm:block"
           >
             Seed Data
           </button>

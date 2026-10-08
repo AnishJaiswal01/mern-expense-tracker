@@ -4,12 +4,15 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recha
 import api from '../utils/api';
 import { setTransactions, setLoading, setError } from '../features/transactions/transactionSlice';
 import { useTheme } from '../context/ThemeContext';
+import { useCurrency } from '../context/CurrencyContext';
+import CurrencyConverterCard from '../components/CurrencyConverterCard';
 
 const COLORS = ['#6366f1', '#4ade80', '#f87171', '#fbbf24', '#38bdf8', '#c084fc', '#f472b6', '#a3e635'];
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const { theme } = useTheme();
+  const { formatAmount, currency } = useCurrency();
   const { transactions, selectedMonth, isLoading, error } = useSelector((state) => state.transactions);
 
   useEffect(() => {
@@ -54,27 +57,35 @@ export default function Dashboard() {
     <div className="p-6 md:p-8 space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-primary-400">Dashboard</h1>
+        <span className="text-xs font-semibold px-3 py-1 bg-surface-light border border-surface-lighter rounded-full text-slate-400">
+          Viewing in: <strong className="text-primary-400">{currency}</strong>
+        </span>
       </div>
 
       {error && <div className="text-danger-400">{error}</div>}
 
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-surface-light p-6 rounded-2xl shadow-lg border border-surface-lighter transition-all duration-200">
           <h3 className="text-slate-400 text-sm font-medium">Total Balance</h3>
           <p className={`text-3xl font-bold mt-2 ${balance >= 0 ? 'text-slate-100' : 'text-danger-400'}`}>
-            ${balance.toFixed(2)}
+            {formatAmount(balance)}
           </p>
         </div>
         <div className="bg-surface-light p-6 rounded-2xl shadow-lg border border-surface-lighter transition-all duration-200">
           <h3 className="text-slate-400 text-sm font-medium">Total Income</h3>
-          <p className="text-3xl font-bold mt-2 text-success-400">+${totalIncome.toFixed(2)}</p>
+          <p className="text-3xl font-bold mt-2 text-success-400">+{formatAmount(totalIncome)}</p>
         </div>
         <div className="bg-surface-light p-6 rounded-2xl shadow-lg border border-surface-lighter transition-all duration-200">
           <h3 className="text-slate-400 text-sm font-medium">Total Expenses</h3>
-          <p className="text-3xl font-bold mt-2 text-danger-400">-${totalExpense.toFixed(2)}</p>
+          <p className="text-3xl font-bold mt-2 text-danger-400">-{formatAmount(totalExpense)}</p>
         </div>
       </div>
 
+      {/* Currency Converter Card */}
+      <CurrencyConverterCard />
+
+      {/* Charts & Recent Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-surface-light p-6 rounded-2xl shadow-lg border border-surface-lighter transition-all duration-200">
           <h3 className="text-xl font-bold mb-6 text-slate-200">Expenses by Category</h3>
@@ -104,7 +115,7 @@ export default function Dashboard() {
                       boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.15)',
                     }}
                     itemStyle={{ color: isDark ? '#e2e8f0' : '#1e293b' }}
-                    formatter={(value) => `$${value.toFixed(2)}`}
+                    formatter={(value) => formatAmount(value)}
                   />
                   <Legend />
                 </PieChart>
@@ -131,7 +142,7 @@ export default function Dashboard() {
                     <p className="text-xs text-slate-400">{new Date(t.date).toLocaleDateString()}</p>
                   </div>
                   <div className={`font-bold ${t.type === 'income' ? 'text-success-400' : 'text-danger-400'}`}>
-                    {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                    {t.type === 'income' ? '+' : '-'}{formatAmount(t.amount)}
                   </div>
                 </div>
               ))}

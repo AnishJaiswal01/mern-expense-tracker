@@ -9,6 +9,7 @@ import {
   setError,
 } from '../features/transactions/transactionSlice';
 import BillScanModal from '../components/BillScanModal';
+import { useCurrency } from '../context/CurrencyContext';
 
 const CATEGORIES = [
   'salary', 'freelance', 'investments', 'food', 'transport',
@@ -18,6 +19,7 @@ const CATEGORIES = [
 
 export default function Transactions() {
   const dispatch = useDispatch();
+  const { currency, currencySymbol, formatAmount, convertBetween } = useCurrency();
   const { transactions, selectedMonth, isLoading, error } = useSelector((state) => state.transactions);
 
   const [formData, setFormData] = useState({
@@ -54,7 +56,16 @@ export default function Transactions() {
     e.preventDefault();
     dispatch(setError(null));
     try {
-      const res = await api.post('/transactions', formData);
+      // If user is viewing in INR, convert input INR to base USD before saving so storage remains consistent
+      const inputAmount = parseFloat(formData.amount);
+      const amountToSave = currency === 'INR' ? convertBetween(inputAmount, 'INR', 'USD') : inputAmount;
+
+      const payload = {
+        ...formData,
+        amount: parseFloat(amountToSave.toFixed(2)),
+      };
+
+      const res = await api.post('/transactions', payload);
       dispatch(addTransaction(res.data));
       setFormData({
         ...formData,
@@ -91,6 +102,9 @@ export default function Transactions() {
     <div className="p-6 md:p-8 space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-primary-400">Transactions</h1>
+        <span className="text-xs font-semibold px-3 py-1 bg-surface-light border border-surface-lighter rounded-full text-slate-400">
+          Viewing in: <strong className="text-primary-400">{currency} ({currencySymbol})</strong>
+        </span>
       </div>
 
       {error && (
@@ -152,7 +166,9 @@ export default function Transactions() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Amount</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Amount ({currencySymbol} {currency})
+              </label>
               <input
                 type="number"
                 name="amount"
@@ -215,7 +231,7 @@ export default function Transactions() {
                     <th className="pb-3 font-medium">Date</th>
                     <th className="pb-3 font-medium">Description</th>
                     <th className="pb-3 font-medium">Category</th>
-                    <th className="pb-3 font-medium text-right">Amount</th>
+                    <th className="pb-3 font-medium text-right">Amount ({currencySymbol})</th>
                     <th className="pb-3 font-medium text-center">Action</th>
                   </tr>
                 </thead>
@@ -232,7 +248,7 @@ export default function Transactions() {
                           t.type === 'income' ? 'text-success-400' : 'text-danger-400'
                         }`}
                       >
-                        {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                        {t.type === 'income' ? '+' : '-'}{formatAmount(t.amount)}
                       </td>
                       <td className="py-4 text-center">
                         <button
