@@ -1,0 +1,215 @@
+/* ─── Bill Scan Modal & Scanner Styles ─── */
+.bill-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bill-modal {
+  background: var(--color-surface-light, #1e2132);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(139, 92, 246, 0.1);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
+html.light .bill-modal {
+  background: #ffffff;
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 20px 50px -10px rgba(79, 70, 229, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.15);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.bill-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(59, 130, 246, 0.06));
+}
+
+html.light .bill-modal-header {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  background: linear-gradient(135deg, rgba(238, 242, 255, 0.9), rgba(243, 232, 255, 0.8));
+}
+
+.bill-modal-header-left { display: flex; align-items: center; gap: 12px; }
+.bill-modal-icon { font-size: 28px; filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6)); }
+.bill-modal-title { font-size: 18px; font-weight: 700; color: #e2e8f0; margin: 0; }
+html.light .bill-modal-title { color: #1e293b; }
+.bill-modal-subtitle { font-size: 12px; color: #94a3b8; margin: 2px 0 0; }
+html.light .bill-modal-subtitle { color: #64748b; }
+
+.bill-modal-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  width: 32px; height: 32px;
+  border-radius: 8px; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+html.light .bill-modal-close {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #64748b;
+}
+.bill-modal-close:hover { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #f87171; }
+
+.bill-upload-area { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.bill-dropzone {
+  border: 2px dashed rgba(139, 92, 246, 0.4);
+  border-radius: 14px; padding: 32px 24px; text-align: center; cursor: pointer;
+  transition: all 0.25s; background: rgba(139, 92, 246, 0.03);
+  min-height: 160px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+html.light .bill-dropzone {
+  background: rgba(245, 243, 255, 0.6);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+.bill-dropzone:hover, .bill-dropzone.dragover {
+  border-color: rgba(139, 92, 246, 0.8); background: rgba(139, 92, 246, 0.08);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+.bill-dropzone.has-preview { padding: 8px; min-height: 200px; }
+.bill-preview-img { max-height: 240px; max-width: 100%; border-radius: 10px; object-fit: contain; }
+.bill-dropzone-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.bill-upload-icon { font-size: 48px; margin-bottom: 4px; }
+.bill-upload-text { color: #cbd5e1; font-size: 14px; margin: 0; }
+html.light .bill-upload-text { color: #334155; }
+.bill-upload-link { color: #8b5cf6; text-decoration: underline; font-weight: 500; }
+.bill-upload-hint { color: #64748b; font-size: 12px; margin: 0; }
+html.light .bill-upload-hint { color: #94a3b8; }
+
+.bill-change-btn {
+  background: transparent; border: 1px solid rgba(255, 255, 255, 0.12); color: #94a3b8;
+  padding: 6px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  transition: all 0.2s; align-self: center;
+}
+html.light .bill-change-btn {
+  border-color: rgba(0, 0, 0, 0.15); color: #475569;
+}
+.bill-change-btn:hover { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
+html.light .bill-change-btn:hover { background: rgba(0, 0, 0, 0.05); color: #1e293b; }
+
+.bill-error {
+  background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #ef4444; padding: 10px 14px; border-radius: 8px; font-size: 13px;
+}
+.bill-scan-btn {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: white; border: none; padding: 12px 24px; border-radius: 12px;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+.bill-scan-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d28d9, #4338ca);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); transform: translateY(-1px);
+}
+.bill-scan-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.bill-scanning { padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.bill-scanning-animation { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+.scan-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(139, 92, 246, 0.6); animation: scanPulse 1.8s ease-out infinite; width: 80px; height: 80px; }
+.scan-ring-2 { width: 60px; height: 60px; animation-delay: 0.3s; border-color: rgba(99, 102, 241, 0.5); }
+.scan-ring-3 { width: 40px; height: 40px; animation-delay: 0.6s; border-color: rgba(59, 130, 246, 0.4); }
+
+@keyframes scanPulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+.scan-emoji { font-size: 28px; position: relative; z-index: 1; animation: floatAnim 2s ease-in-out infinite; }
+@keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.bill-scanning-text { font-size: 16px; font-weight: 600; color: #e2e8f0; margin: 0; }
+html.light .bill-scanning-text { color: #1e293b; }
+.bill-scanning-sub { font-size: 13px; color: #64748b; margin: 0; }
+
+.bill-review { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px; }
+.bill-review-success {
+  background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.25);
+  color: #16a34a; padding: 10px 14px; border-radius: 8px; font-size: 13px;
+  display: flex; align-items: center; gap: 8px; font-weight: 500;
+}
+.bill-review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.bill-field { display: flex; flex-direction: column; gap: 4px; }
+.bill-field-full { grid-column: 1 / -1; }
+.bill-field label { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+html.light .bill-field label { color: #64748b; }
+
+.bill-field input, .bill-field select {
+  background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px; color: #e2e8f0; padding: 8px 12px; font-size: 14px;
+  transition: border-color 0.2s; outline: none; width: 100%; box-sizing: border-box;
+}
+html.light .bill-field input, html.light .bill-field select {
+  background: #ffffff !important; border-color: #cbd5e1 !important; color: #0f172a !important;
+}
+.bill-field input:focus, .bill-field select:focus {
+  border-color: rgba(139, 92, 246, 0.6) !important; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15) !important;
+}
+.bill-field select option { background: #1e2132; color: #e2e8f0; }
+html.light .bill-field select option { background: #ffffff; color: #0f172a; }
+
+.bill-review-actions { display: flex; gap: 10px; margin-top: 4px; }
+.bill-back-btn {
+  flex: 1; background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8;
+  padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;
+}
+html.light .bill-back-btn { border-color: rgba(0, 0, 0, 0.15); color: #475569; }
+.bill-back-btn:hover { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
+html.light .bill-back-btn:hover { background: rgba(0, 0, 0, 0.04); color: #0f172a; }
+
+.bill-confirm-btn {
+  flex: 2; background: linear-gradient(135deg, #059669, #0d9488); color: white;
+  border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;
+  font-size: 14px; font-weight: 600; transition: all 0.25s; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+.bill-confirm-btn:hover { background: linear-gradient(135deg, #047857, #0f766e); box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4); transform: translateY(-1px); }
+
+.scan-bill-trigger {
+  display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.35); color: #8b5cf6;
+  padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.25s; width: 100%; justify-content: center; margin-bottom: 4px;
+}
+html.light .scan-bill-trigger {
+  background: linear-gradient(135deg, rgba(238, 242, 255, 0.9), rgba(243, 232, 255, 0.8));
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #6366f1;
+}
+.scan-bill-trigger:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
+  border-color: rgba(139, 92, 246, 0.6); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2); transform: translateY(-1px);
+}
+.scan-bill-divider {
+  display: flex; align-items: center; gap: 10px; color: #64748b; font-size: 12px; margin: 4px 0;
+}
+.scan-bill-divider::before, .scan-bill-divider::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.08);
+}
+html.light .scan-bill-divider::before, html.light .scan-bill-divider::after {
+  background: rgba(0, 0, 0, 0.1);
+}

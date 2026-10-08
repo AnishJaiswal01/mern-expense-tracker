@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
 import Dashboard from './pages/Dashboard';
@@ -10,7 +11,7 @@ import Register from './pages/Register';
 function PrivateRoute({ children }) {
   const { token } = useSelector((state) => state.auth);
   return token ? (
-    <div className="min-h-screen bg-surface text-slate-100 flex flex-col relative">
+    <div className="min-h-screen bg-surface text-slate-100 flex flex-col relative transition-colors duration-200">
       <Navbar />
       <main className="flex-1 max-w-6xl w-full mx-auto">{children}</main>
       <Chatbot />
@@ -27,47 +28,49 @@ function GuestRoute({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Protected routes */}
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/transactions"
-          element={
-            <PrivateRoute>
-              <Transactions />
-            </PrivateRoute>
-          }
-        />
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Protected routes */}
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <PrivateRoute>
+                <Transactions />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Guest-only routes */}
-        <Route
-          path="/login"
-          element={
-            <GuestRoute>
-              <Login />
-            </GuestRoute>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <GuestRoute>
-              <Register />
-            </GuestRoute>
-          }
-        />
+          {/* Guest-only routes */}
+          <Route
+            path="/login"
+            element={
+              <GuestRoute>
+                <Login />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <GuestRoute>
+                <Register />
+              </GuestRoute>
+            }
+          />
 
-        {/* Catch-all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
